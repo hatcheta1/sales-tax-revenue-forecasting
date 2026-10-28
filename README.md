@@ -1,4 +1,4 @@
-# Cook County CHMR Data Infrastructure — Project README
+# Sales Tax Revenue Forecasting [OLD README]
 
 **Version:** 1.0 | **Date:** June 2026
 
