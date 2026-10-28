@@ -33,8 +33,9 @@ from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.preprocessing import StandardScaler
 import statsmodels.api as sm
+from pathlib import Path
 
-DATA_PATH = "combined_nyc.csv"
+DATA_PATH = Path("nyc/combined_nyc.csv")
 DATE_COL = "date"
 TARGET_COL = "sales_tax"
 N_TEST = 24          # rolling-origin backtest window (months held out, walked forward)

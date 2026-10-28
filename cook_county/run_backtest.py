@@ -27,10 +27,13 @@ Outputs (written next to this script):
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
+from pathlib import Path
 
 from chmr_model_lib import (
     prepare_full_dataset, feature_cols_for, backtest, N_TEST,
 )
+
+RESULTS_DIR = Path("cook_county/results")
 
 if __name__ == "__main__":
     df = prepare_full_dataset()
@@ -59,7 +62,7 @@ if __name__ == "__main__":
         passed = (row["R2"] > 0.93) and (row["MAPE_%"] < 3.5) and (row["RMSE"] < 8_000_000)
         print(f"{key:35s} {'PASS' if passed else 'fail'}")
 
-    results_df.to_csv("chmr_delevel_results.csv")
+    results_df.to_csv(RESULTS_DIR / "chmr_delevel_results.csv")
 
     # ---- month-dummy coefficients from a full-sample OLS on trend_dev ----
     feats = feature_cols_for("trend_dev", df.columns)
@@ -70,12 +73,12 @@ if __name__ == "__main__":
     month_pvals = ols.pvalues[[c for c in feats if c.startswith("m_")]]
     month_table = pd.DataFrame({"coef_log_dev": month_coefs, "p_value": month_pvals})
     month_table["approx_pct_effect_vs_Jan"] = (np.exp(month_table["coef_log_dev"]) - 1) * 100
-    month_table.to_csv("chmr_month_dummy_effects.csv")
+    month_table.to_csv(RESULTS_DIR / "chmr_month_dummy_effects.csv")
     print("\n=== Month effects (relative to January baseline), from HAC-robust OLS on trend deviation ===\n")
     print(month_table.round(4).to_string())
 
     best_key = results_df.index[0]
-    detail[best_key].to_csv("chmr_best_backtest_predictions.csv", index=False)
+    detail[best_key].to_csv(RESULTS_DIR / "chmr_best_backtest_predictions.csv", index=False)
     print(f"\nBest performing combo: {best_key}")
 
 # === Rolling-origin backtest (last 24 months), reconstructed levels ===

@@ -24,8 +24,9 @@ from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.preprocessing import StandardScaler
 import statsmodels.api as sm
+from pathlib import Path
 
-DATA_PATH = "combined_CC_v7.csv"
+DATA_PATH = Path("cook_county/combined_CC_v7.csv")
 N_TEST = 24          # rolling-origin backtest window (months held out, walked forward)
 RANDOM_STATE = 42
 
